@@ -1,0 +1,25 @@
+{
+  "name": "default",
+  "type": "mariadb",
+  "host": "localhost",
+  "port": 3306,
+  "username": "test",
+  "password": "test",
+  "database": "test",
+  "synchronize": true,
+  "logging": false,
+  "entities": [
+    "${rootDir}/entity/**/*.ts"
+  ],
+  "migrations": [
+    "${rootDir}/migration/**/*.ts"
+  ],
+  "subscribers": [
+    "${rootDir}/subscriber/**/*.ts"
+  ],
+  "cli": {
+    "entitiesDir": "${rootDir}/entity",
+    "migrationsDir": "${rootDir}/migration",
+    "subscribersDir": "${rootDir}/subscriber"
+  }
+}
