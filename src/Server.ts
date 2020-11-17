@@ -1,15 +1,16 @@
-import {Configuration, Inject} from "@tsed/di";
+import "@tsed/ajv";
 import {PlatformApplication} from "@tsed/common";
+import {Env} from "@tsed/core";
+import {Configuration, Inject} from "@tsed/di";
 import "@tsed/platform-express"; // /!\ keep this import
+import "@tsed/typeorm";
 import * as bodyParser from "body-parser";
 import * as compress from "compression";
 import * as cookieParser from "cookie-parser";
-import * as methodOverride from "method-override";
 import * as cors from "cors";
-import "@tsed/ajv";
-import "@tsed/typeorm";
+import * as methodOverride from "method-override";
 import typeormConfig from "./config/typeorm";
-import {Env} from "@tsed/core";
+import "./modules/oracle-bot"; // load module
 
 export const rootDir = __dirname;
 
@@ -17,10 +18,10 @@ export const rootDir = __dirname;
   rootDir,
   oracleBot: {
     webhook: {
-       channel: {
+      channel: {
         url: process.env.ODA_URL,
         secret: process.env.ODA_SECRET
-      } 
+      }
     }
   },
   env: Env.DEV,
@@ -32,6 +33,10 @@ export const rootDir = __dirname;
       `${rootDir}/controllers/**/*.ts`
     ]
   },
+  componentsScan: [
+    `${rootDir}/components/**/*.ts`, // load BotComponents
+    `${rootDir}/services/**/*.ts`
+  ],
   typeorm: typeormConfig,
   exclude: [
     "**/*.spec.ts"

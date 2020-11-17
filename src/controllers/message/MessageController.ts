@@ -1,35 +1,40 @@
-import {BodyParams, Controller, Post, ProviderScope, Scope} from "@tsed/common";
+import {Lib} from "@oracle/bots-node-sdk";
+import {BodyParams, Controller, Inject, Post, ProviderScope, Scope} from "@tsed/common";
+import {MCHelper} from "../../helpers/MCHelper";
 import {TwilioHelper} from "../../helpers/TwilioHelper";
-import {ODAHelper} from "../../helpers/ODAHelper";
-import {CardMessage} from '../../models/CardMessage';
-import {TextMessage} from '../../models/TextMessage';
-import { MCHelper } from '../../helpers/MCHelper';
-import { Lib } from '@oracle/bots-node-sdk';
-
+import {CardMessage} from "../../models/CardMessage";
+import {TextMessage} from "../../models/TextMessage";
+import {OracleBotClient} from "../../modules/oracle-bot";
 
 @Controller("/messages")
 @Scope(ProviderScope.SINGLETON)
 export class MessageController {
+  @Inject()
+  private oracleBotClient: OracleBotClient;
 
-    constructor(private mcHelper:MCHelper,private twilioHelper: TwilioHelper, private odaHelper: ODAHelper) {
-        console.log("MessageController New Instance");
+  @Inject()
+  private twilioHelper: TwilioHelper;
 
-    }
+  @Inject()
+  private mcHelper: MCHelper;
 
-    @Post("/twilioResponse")
-    twilioResponse(@BodyParams() body: any) {
-        this.odaHelper.sendMessage(this.odaHelper.createMessage(body));
-    }
+  $onInit() {
+    console.log('====>MessageController', this.oracleBotClient)
+  }
 
-    @Post("/odaResponse")
-    odaResponse(@BodyParams('messagePayload') m: CardMessage | TextMessage, @BodyParams("userId") userId: string) {
-       // this.twilioHelper.sendMessage(this.odaHelper.convertMessage(m), userId);
-       console.log("response");
-    }
+  @Post("/twilioResponse")
+  twilioResponse(@BodyParams() body: any) {
+    this.oracleBotClient.sendMessage(this.oracleBotClient.createMessage(body));
+  }
 
-    @Post("/webResponse")
-    webResponse(@BodyParams("message") message:string,@BodyParams("conversation") conversation: Lib.Conversation) {
-        this.mcHelper.sendMessage(conversation);
-    }
+  @Post("/odaResponse")
+  odaResponse(@BodyParams("messagePayload") m: CardMessage | TextMessage, @BodyParams("userId") userId: string) {
+    // this.twilioHelper.sendMessage(this.odaHelper.convertMessage(m), userId);
+    console.log("response");
+  }
 
+  @Post("/webResponse")
+  webResponse(@BodyParams("message") message: string, @BodyParams("conversation") conversation: Lib.Conversation) {
+    this.mcHelper.sendMessage(conversation);
+  }
 }
