@@ -1,15 +1,17 @@
 import {Injectable, ProviderScope, ProviderType} from "@tsed/di";
 
 @Injectable({
-    type: ProviderType.SERVICE,
-    scope: ProviderScope.SINGLETON
+    scope: ProviderScope.INSTANCE,
+    type: ProviderType.SERVICE
 })
 export class TwilioHelper {
 
      client;
 
     constructor() {
+        console.log("TwilioHelper New Instance");
         this.client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
     }
 
     sendMessage(message:string, receiver:string){

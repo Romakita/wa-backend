@@ -1,4 +1,4 @@
-import { Card } from '../entities/Card';
+import { Card } from './Card';
 import { MessageModel } from './MessageModel';
 
 export class CardMessage implements MessageModel {

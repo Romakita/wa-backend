@@ -1,27 +1,27 @@
-import {Lib} from '@oracle/bots-node-sdk';
-import {TwilioHelper} from "../helpers/TwilioHelper";
-import {ComponentAbstract} from "@oracle/bots-node-sdk/lib";
-import {Injectable} from "@tsed/di";
-import {ProviderScope, Scope} from "@tsed/common";
+import { Lib } from '@oracle/bots-node-sdk';
+import {Inject, Injectable} from "@tsed/di";
+import {BotComponent} from "../decorators/BotComponent";
+import {OracleBotClient} from "../services/OracleBotClient"
 
-@Scope(ProviderScope.SINGLETON)
+@BotComponent()
 export class MessageComponent implements Lib.IComponent {
-
-    constructor(private twilioHelper: TwilioHelper) {
-    }
+   @Inject()
+   private client: OracleBotClient;
 
     public metadata(): Lib.IComponentMetadata {
-        return {name: 'cy2.message.component'}
+        return {
+            name: 'cy2.message.component',
+            supportedActions: ['chatContinue', 'chatFinished']
+        }
     }
 
     public invoke(conversation: Lib.Conversation, done: () => void): void {
-        conversation.reply(conversation.text());
-        //this.sendMessage(conversation.text());
+        this.sendMessage();
+        conversation.transition();
         done();
     }
 
-    public sendMessage(message: string) {
-        this.twilioHelper.sendMessage(message, "+14155238886");
+    sendMessage(){
+        this.client.hello();
     }
-
 }

@@ -9,7 +9,7 @@
   "synchronize": true,
   "logging": false,
   "entities": [
-    "${rootDir}/entity/**/*.ts"
+    "${rootDir}/entities/*.ts"
   ],
   "migrations": [
     "${rootDir}/migration/**/*.ts"
@@ -18,7 +18,7 @@
     "${rootDir}/subscriber/**/*.ts"
   ],
   "cli": {
-    "entitiesDir": "${rootDir}/entity",
+    "entitiesDir": "${rootDir}/entities/*.ts",
     "migrationsDir": "${rootDir}/migration",
     "subscribersDir": "${rootDir}/subscriber"
   }

@@ -9,17 +9,26 @@ import * as cors from "cors";
 import "@tsed/ajv";
 import "@tsed/typeorm";
 import typeormConfig from "./config/typeorm";
-
+import {Env} from "@tsed/core";
 
 export const rootDir = __dirname;
 
 @Configuration({
   rootDir,
+  oracleBot: {
+    webhook: {
+       channel: {
+        url: process.env.ODA_URL,
+        secret: process.env.ODA_SECRET
+      } 
+    }
+  },
+  env: Env.DEV,
   acceptMimes: ["application/json"],
   httpPort: process.env.PORT || 8083,
   httpsPort: false, // CHANGE
   mount: {
-    "/rest": [
+    "/v1": [
       `${rootDir}/controllers/**/*.ts`
     ]
   },
